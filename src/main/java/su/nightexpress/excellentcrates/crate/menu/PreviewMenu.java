@@ -1,8 +1,10 @@
 package su.nightexpress.excellentcrates.crate.menu;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import su.nightexpress.excellentcrates.CratesPlugin;
 import su.nightexpress.excellentcrates.crate.impl.Crate;
@@ -23,10 +25,7 @@ import su.nightexpress.nightcore.menu.item.ItemHandler;
 import su.nightexpress.nightcore.menu.item.MenuItem;
 import su.nightexpress.nightcore.menu.link.Linked;
 import su.nightexpress.nightcore.menu.link.ViewLink;
-import su.nightexpress.nightcore.util.ItemReplacer;
-import su.nightexpress.nightcore.util.Lists;
-import su.nightexpress.nightcore.util.NumberUtil;
-import su.nightexpress.nightcore.util.TimeUtil;
+import su.nightexpress.nightcore.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,7 +155,6 @@ public class PreviewMenu extends ConfigMenu<CratesPlugin> implements AutoFilled<
             else {
                 limitPermissionLore.addAll(this.rewardLimitBadPermissionLore);
             }
-
             ItemReplacer.create(item).setDisplayName(this.rewardName).setLore(this.rewardLore).trimmed()
                 .replace(WIN_LIMIT_AMOUNT, limitAmountLore)
                 .replace(WIN_LIMIT_COOLDOWN, limitCooldownLore)
@@ -166,6 +164,10 @@ public class PreviewMenu extends ConfigMenu<CratesPlugin> implements AutoFilled<
                 .replace(crate.getPlaceholders())
                 .replacePlaceholderAPI(player)
                 .writeMeta();
+            ItemMeta meta = item.getItemMeta();
+            List<String> lore = PlaceholderAPI.setPlaceholders(player, meta.getLore());
+            meta.setLore(lore);
+            item.setItemMeta(meta);
             return item;
         });
     }
