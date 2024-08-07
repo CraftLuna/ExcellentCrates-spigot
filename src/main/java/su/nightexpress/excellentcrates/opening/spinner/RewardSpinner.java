@@ -1,8 +1,10 @@
 package su.nightexpress.excellentcrates.opening.spinner;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import su.nightexpress.excellentcrates.CratesPlugin;
 import su.nightexpress.excellentcrates.config.Keys;
@@ -17,10 +19,7 @@ import su.nightexpress.nightcore.util.Lists;
 import su.nightexpress.nightcore.util.PDCUtil;
 import su.nightexpress.nightcore.util.random.Rnd;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class RewardSpinner extends InventorySpinner {
 
@@ -77,6 +76,10 @@ public class RewardSpinner extends InventorySpinner {
         Reward reward = this.opening.getCrate().rollReward(this.opening.getPlayer(), rarity);
 
         ItemStack item = reward.getPreview();
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = PlaceholderAPI.setPlaceholders(player, meta.getLore());
+        meta.setLore(lore);
+        item.setItemMeta(meta);
         PDCUtil.set(item, Keys.rewardId, reward.getId());
 
         return item;
